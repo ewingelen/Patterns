@@ -25,12 +25,15 @@ interface Repository {
 
     fun translate(text: String)
 
-    class Base(
-        private var cloudDataSource: CloudDataSource = CloudDataSource.ToEnglish()
-    ) : Repository {
+    class Base: Repository {
+
+        private lateinit var cloudDataSource: CloudDataSource
+
+        private val russianCloudDataSource by lazy { CloudDataSource.ToRussian() }
+        private val englishCloudDataSource by lazy { CloudDataSource.ToEnglish() }
 
         override fun changeTargetLanguage(english: Boolean) {
-            cloudDataSource = if (english) CloudDataSource.ToEnglish() else CloudDataSource.ToRussian()
+            cloudDataSource = if (english) this.englishCloudDataSource else russianCloudDataSource
         }
 
         override fun translate(text: String) {
@@ -105,4 +108,3 @@ interface Button {
         }
     }
 }
-
